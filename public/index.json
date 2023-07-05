@@ -1,0 +1,148 @@
+[
+{
+	"uri": "/2-preparation/2.1-createvpc/",
+	"title": "Create VPC",
+	"tags": [],
+	"description": "",
+	"content": "Create VPC Go to the AWS Management Console\nFind VPC Select VPC In the VPC interface\nSelect Your VPCs Select Create VPC In the Create VPC interface\nSelect VPC, subnets, etc, Name, enter your VPC name. IPv4 CIDR block, enter 10.0.0.0/16 Select Create VPC Create VPC successfully and select View VPC Details of the newly created VPC.\nImplement public IP allocation.\nSelect Subnets Select public subnet Select Edit subnet settings Select Enable auto-assign public IPv4 address. Select Save Check that the allocation was successful. Allocate the remaining Public subnet (do the same).\n"
+},
+{
+	"uri": "/",
+	"title": "Deploying FCJ Management Application With Auto Scaling Group",
+	"tags": [],
+	"description": "",
+	"content": "DEPLOYING FCJ MANAGEMENT APPLICATION WITH AUTO SCALING GROUP Overview In this exercise, we will deploy the application with Auto Scaling Group to ensure the scalability of the application according to the needs of the user. In addition, we will also implement a Load Balancer to balance the load and coordinate user access requests to our Application Tier.\nMake sure you go through the [Deploying FCJ Management Application on a Windows/AmazonLinux Virtual Machine] document and understand how to deploy the application on the virtual machine. We will need to use the virtual machine deployed FCJ Management for mass deployment and scaling in the Auto Scaling Group.\nAuto Scaling Group Auto Scaling Group is a group of EC2 Instances. This group can scale the number of EC2 Instance members according to the scaling policy you set.\nLaunch Template Launch Template is a feature that helps you create a template for the initialization of EC2 Instances. As a result, you can streamline and simplify the creation of EC2 Instances for the Auto Scaling service.\nLoad Balancer Load Balancer is a tool that can distribute exchanged data traffic to AWS resources (specifically, EC2 Instances in this lab) in the Target Group.\nTarget Group Target Group is a group of AWS resource elements that will receive data traffic delivered and transported by the Load Balancer.\nContent Introduction Preparation steps Initialize Template Initialize Target Group Initialize Load Balancer Initialize Auto Scaling Group Check Result Resources Cleanup "
+},
+{
+	"uri": "/1-introduce/",
+	"title": "Introduction",
+	"tags": [],
+	"description": "",
+	"content": "Introduce In this exercise, we will deploy the application with Auto Scaling Group to ensure the scalability of the application according to the needs of the user. In addition, we will also implement a Load Balancer to balance the load and coordinate user access requests to our Application Tier.\nMake sure you go through the [Deploying FCJ Management Application on a Windows/AmazonLinux Virtual Machine] document and understand how to deploy the application on the virtual machine. We will need to use the virtual machine deployed FCJ Management for mass deployment and scaling in the Auto Scaling Group.\nAuto Scaling Group Auto Scaling Group is a group of EC2 Instances. This group can scale the number of EC2 Instance members according to the scaling policy you set.\nLaunch Template Launch Template is a feature that helps you create a template for the initialization of EC2 Instances. As a result, you can streamline and simplify the creation of EC2 Instances for the Auto Scaling service.\nLoad Balancer Load Balancer is a tool that can distribute exchanged data traffic to AWS resources (specifically, EC2 Instances in this lab) in the Target Group.\nTarget Group Target Group is a group of AWS resource elements that will receive data traffic delivered and transported by the Load Balancer.\nIn this exercise, we will deploy the application with Auto Scaling Group to ensure the scalability of the application according to the needs of the user. In addition, we will also implement a Load Balancer to balance the load and coordinate user access requests to our Application Tier.\nMake sure you go through the documentation Deploying FCJ Management Applications on Windows/AmazonLinux Virtual Machines and understand how to deploy the application on the virtual machine. We will need to use FCJ Management deployed virtual machine for mass deployment and scaling in Auto Scaling Group.\n"
+},
+{
+	"uri": "/2-preparation/2.2-createsg/",
+	"title": "Create Security Group",
+	"tags": [],
+	"description": "",
+	"content": "Create a Security Group for FCJ Management We will create a Security group for the application.\nIn the VPC interface, select Security Group Select Create security group Perform Security Group configuration\nSecurity group name, enter FCJ-Management-SG Description, enter Security Group for FCJ Management VPC, select the newly created VPC. Configure Inbound rules\nFirst configure SSH port 22 and Source: MyIP to be able to access the instance. Next is HTTP port 80. Custom TCP port 5000 for FCJ Management HTTPS port 443. Check Outbound rules and select Create security group Finish creating Security Group for FCJ Management application. Check Security Group details. "
+},
+{
+	"uri": "/2-preparation/",
+	"title": "Preparation",
+	"tags": [],
+	"description": "",
+	"content": "Preparation In this exercise, we need to prepare some services to be able to deploy the FCJ Management application using Auto Scaling Group with Elastic Load Balancer. In general, we will deploy the ShareNote application according to the following architecture:\nContent Create VPC Create Security Group for FCJ Management instance Create Security Group for DB instance Create DB Subnet Group Create DB instance Create EC2 instance Connect EC2 instance Connect DB instance Deploy Application Initialize AMI from Virtual Machine "
+},
+{
+	"uri": "/2-preparation/2.3-createsgdb/",
+	"title": "Create Security Group DB",
+	"tags": [],
+	"description": "",
+	"content": "Create a security group for the Database instance. We create a Security group for the Database instance. To ensure security, do not configure the application’s Security group together.\nSelect Security Group Select Create security group Practice configuration security group\nSecurity Group name, enter FCJ-Management-DB-SG Description, enter Security Group for DB instance Select the newly created VPC Configure Inbound rules\nSelect Add rule Select MYSQL/Aurora port 3306 Then select Source as FCJ-Management-SG Select Create security group Finish creating Security group for the database. "
+},
+{
+	"uri": "/3-launchtemplate/",
+	"title": "Launch Template",
+	"tags": [],
+	"description": "",
+	"content": "Launch Template In this section, you will create a Launch Template using the AMI you created from the Amazon Linux 2 Instance in the previous step.\nAccess to EC2\nSelect Launch Templates Select Create launch template In the Create launch template interface\nLaunch template name, enter FCJ-Management-template Template version description, enter Template for FCJ Management Perform AMI selection\nSelect My AMIs Select Owned by me Select FCJ-Management-AMI Make Instance type selection\nSelect t2.micro Key pair, select aws-fcj-key created when creating EC2 instance. Configure Network\nSubnet, select public subnet Firewall (Security Group), select Select existing security group Select FCJ-Management-SG Check again and execute Create launch template Execute successfully and select View launch templates View the template just created. "
+},
+{
+	"uri": "/2-preparation/2.4-createdbsg/",
+	"title": "Create DB Subnet Group",
+	"tags": [],
+	"description": "",
+	"content": "Create DB Subnet Group Go to RDS\nSelect Subnet groups Select Create DB subnet group In the Create DB subnet group interface\nName, enter FCJ-Management-Subnet-Group Description, enter Subnet Group for FCJ Management Select the created VPC. Configure subnet\nSelect the AZ Select subnet Select Create Successfully create DB Subnet Group "
+},
+{
+	"uri": "/4-createtg/",
+	"title": "Create Target Group",
+	"tags": [],
+	"description": "",
+	"content": "Create Target Group Access EC2 interface\nSelect Target Groups Select Create target group Make a configuration\nSelect Instances On the Specify group details page, set the following parameters for target group:\nTarget group name: Enter the name of the target group (eg FCJ-Management-TG). Protocol: HTTP. Port: 5000 (Port used by FCJ Management). The remaining items leave the default. Select Next In the Available instances interface\nSelect FCJ-Management instance Select port 5000 Select Include as pending below (if not selected when accessing with DNS Load Balancer will get an error HTTP 503: Service unavailable) Review Select Create target group In the Register pending targets only interface, select Continue Finish creating Target group "
+},
+{
+	"uri": "/2-preparation/2.5-createdbinstance/",
+	"title": "Create DB Subnet Group",
+	"tags": [],
+	"description": "",
+	"content": "Create DB instance Go to AWS Management Console\nFind RDS Select RDS In RDS interface\nSelect Databases Select Create database Choose the method to create database\nSelect Standard create Configure Engine database\nSelect MySQL Configure Template\nSelect Dev/Test For Availability and durability, select Mutil-AZ DB instance Next, make detailed settings\nDB instance identifier, enter fcj-management-db-instance Master user, enter admin Master password, enter your choice (in the lab, enter phuc2002) Confirm password, enter the password again. Perform network configuration for db instance\nNetwork type, select IPv4 VPC, select asg-vpc created Subnet group, select the created subnet group. VPC security group, Select Choose existing Security Group, select FCJ-Management-DB-SG (to avoid confusion with web SG). Initialize Database with the name awsuser, leave the rest to default. Lưu ý: Ở tùy chọn Deletion protection, giá trị mặc định là Enable giúp bảo vệ cơ sở dữ liệu khỏi bị vô tình xóa (Protects the database from being deleted accidentally). Tuy nhiên, trong bài lab này, ta Disable Deletion protection để dễ dọn dẹp tài nguyên vào cuối bài lab. Check again and select Create database Initialize DB instance in 10 minutes. When Status changes to Available, it’s done.\nSelect db instance just created. In the Connectivity \u0026amp; security interface\nStore value Endpoint Check port 3306 "
+},
+{
+	"uri": "/5-createlb/",
+	"title": "Create Load Balancer",
+	"tags": [],
+	"description": "",
+	"content": "Create Load Balancer Access to EC2\nSelect Load Balancers Select Create Load Balancer Section Load balancer types\nSelect HTTP/HTTPS Select Create In the Create Application Load Balancer interface\nLoad balancer name, enter FCJ-Management-LB Scheme, select Internet-facing IP address type, select IPv4 Configure Network mapping\nVPC, select the VPC created in the lab. Mapping, select ap-southeast-1a and ap-southeast-1b Select subnet Configure security group, select FCJ-Management-SG.\nSection Listeners and routing, in Default actions select FCJ-Management-TG Check again and select Create load balancer Create Application Load Balancer successfully and select View load balancer In the Load Balancer interface. The Load Balancer creation process will take about 5-10 minutes to complete. You can check the status change from provisioning to active in the Load Balancer list.\nSelect FCJ-Management-LB Copy DNS name of Load Balancer Access by pasting DNS name into the browser. However, at the moment we only have a single EC2 server. Next, we will proceed to configure the Auto Scaling Group feature, which will automatically increase the number of our EC2 instances when the traffic is high.\n"
+},
+{
+	"uri": "/6-createasg/",
+	"title": "Create Auto Scaling Group",
+	"tags": [],
+	"description": "",
+	"content": "Create Auto Scaling Group In this section, we will implement an Auto Scaling Group for the FCJ Management application to ensure our application will be deployed with high availability, and potentially increase the number of EC2 instances when users visit. into the boost system.\nAccess to EC2\nSelect Auto Scaling Groups Select Create Auto Scaling group Auto Scaling Group name, enter FCJ-Management-ASG Configure the template\nLaunch template. select FCJ-Management-template Select Next Configure Network\nVPC, select created. Select AZ and subnet Select Next Configure Load balancing\nSelect Attach to an existing load balancer Select Choose from your load balancer target groups Select FCJ-Management-TG Select Next Configure group size and scaling policy.\nDesired capacity: Enter 1. (Default) Minimum capacity: Enter 1. (Default) Maximum capacity: Enter 3. Under Scaling policies - optional: Select this exercise to make it easier for the next step to be checked. You can completely set the resource scaling policy according to your needs.\nSelect Target tracking scaling policy Scaling policy name, enter Target Tracking Policy Metric type, select Application Load Balancer request count per target Target group, enter FCJ-Management Target value, enter 30 Select Next Select Create a topic Configure Add notifications. Select Next Check email and Confirm subscription Select Create Auto Scaling group Complete creation Auto Scaling groups The initialization of Auto Scaling Group will be done, the newly created Auto Scaling Group will be displayed in the list, and you can select it to view detailed information.\nWe can track existing EC2 instances in Auto Scaling Group on the Instance management page. Instances with InService status are ready-to-go instances. "
+},
+{
+	"uri": "/2-preparation/2.6-createec2/",
+	"title": "Create EC2 Instance",
+	"tags": [],
+	"description": "",
+	"content": "Create EC2 instance Go to AWS Management Console\nFind EC2 Select EC2 In the EC2 interface\nSelect Instances Select Launch instances Name instance, enter FCJ-Management Made for AMI\nSelect Quick Start Select Amazon Linux Select Instance type\nSelect t2.micro\nSelect Create new key pair Configure key pair. Configure Network VPC, select the created VPC. Subnet, select Public subnet. Check if Auto-assign public IP?. If you have not reviewed the step of allocating public IP in the step of creating VPC. Select Select existing security group and then select FCJ-Management-SG Select Launch instance Successfully initialized instance and select View all instances View instance details and note Public IPv4 address to make the connection in the next step. "
+},
+{
+	"uri": "/7-checkresult/",
+	"title": "Check result",
+	"tags": [],
+	"description": "",
+	"content": "Check the result In this exercise, we will test access to ShareNote and proceed to increase the number of access requests to the application by opening multiple connections simultaneously using Webserver Stress Tool 8. Click here Webserver Stress Tool 8 to download.\nDownload Webserver Stress Tool 8 Test the self-scalability of the deployed FCJ Management application\nExtract the zip file and install Webserver Stress Tool 8 with default options. Start Webserver Stress Tool 8 to proceed to create a large amount of access to the Endpoint of the Load Balancer. Click on the Test Type tab and enter the parameters as shown below: Run Unit : 100000 Number of Users : 101 Click Delay : 1 Click the URLs tab, copy the DNS name of the FCJ Management application into the URL box (the DNSName when you created the Load Balancer in step 5. Initialize the Load Balancer), and click Start Test After some time, check the response of the Auto Scaling Group. We see the number of instances is increased to the maximum number that we set to 3. Check that access to the application from the browser is not interrupted. View logfile results See how EC2 looks when running the application. Congratulations on completing the FCJ Management practice session with Auto Scaling Group and Elastic Load Balancer.\nYou will receive an email notification.\n"
+},
+{
+	"uri": "/2-preparation/2.7-connectingec2/",
+	"title": "Connecting EC2 Instance",
+	"tags": [],
+	"description": "",
+	"content": "Connect EC2 instance Use MobaXterm to SSH into the instance via port 22.\nSelect Session In the Session settings section\nRemote host, enter Public IPv4 address of the instance Specify username, enter ec2-user Check port 22 Select Advanced SSH settings Select Use private key and select keypair of the instance. Select OK Follow the instructions in the figure. EC2 instance connection was successful. Install node version manager (nvm) by typing the following in the following command line:\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash\rEnable nvm by typing the following in the command line and Use nvm to install the latest version of Node.js by typing the following in the command line.\n. ~/.nvm/nvm.sh\rnvm install 16\rCheck nodejs is installed successfully\nnode -v\rnpm -v\r"
+},
+{
+	"uri": "/8-cleanup/",
+	"title": "Clean up resources",
+	"tags": [],
+	"description": "",
+	"content": "Clean up resources We will clean up resources in the following order:\nRemove Auto Scaling Group Access EC2 Management Console On the left navigation bar, select Auto Scaling Groups Select Auto Scaling Group related to the lab. Click Delete Type delete in the empty box and press delete Remove Load Balancer Access EC2 Management Console On the left navigation bar, select Load Balancers Select Load Balancer related to the lab Click Actions Click Delete Remove Target Group Access EC2 Management Console On the left navigation bar, select Target Groups Select Target Group related to the lab. Click Actions Click Delete Click Yes, delete Delete Launch Template Access EC2 Management Console On the left navigation bar, select Launch Templates Select Launch Template related to the lab. Click Actions Click Delete template Type delete in the empty box and press delete Delete AMI Access EC2 Management Console On the left navigation bar, select AMIs Select AMI related to the lab. Click Actions Click Deregister Click Continue Terminate EC2 instance Access EC2 Management Console On the left navigation bar, select Intances Select all EC2 Instance related to the lab Click Actions Click Manage Instance State Select Terminate Click Change State Delete DB Instance Access the RDS Management Console On the left navigation bar, select Databases Select all DB Instance related to the lab. Click Actions Click Delete Uncheck Create final snapshot? and select I acknowledge that upon instance deletion, automated backups, including system snapshots and point-in-time recovery, will no longer be available Type delete me in the empty box. Click Delete Delete Security Group Access EC2 Management Console On the left navigation bar, select Security Groups Select all Security Groups related to the lab. Click Actions Click Delete security groups Click Delete "
+},
+{
+	"uri": "/2-preparation/2.8-connectdb/",
+	"title": "Connecting DB Instance",
+	"tags": [],
+	"description": "",
+	"content": "Connect DB instance Use user root privileges\nsudo su\rInstall MySQL command-line client\nyum install mariadb\rCheck the installation is successful\nmysql --version\rConnect from MySQL command-line client (unencrypted)\nFor the -h parameter, replace the DNS name (endpoint) for the DB instance\nFor the -P parameter, substitute the port for the DB instance. (3306)\nFor the -u parameter, replace it with master user\nEnter master user password\nmysql -h db-instance.crmmitoajvxx.us-east-1.rds.amazonaws.com -P 3306 -u admin -p\rDB instance connection successful. Check the databases in the instance with the command that will print out a list of all the databases.\nSHOW DATABASES;\rSelect the database to make changes to using USE.\nUSE \u0026lt;created database\u0026gt;;\rCreate a table in the awsuser database with the CREATE TABLE command.\nCREATE TABLE `awsfcjuser`.`user` ( `id` INT NOT NULL AUTO_INCREMENT , `first_name` VARCHAR(45) NOT NULL , `last_name` VARCHAR(45) NOT NULL , `email` VARCHAR(45) NOT NULL , `phone` VARCHAR(45) NOT NULL , `comments` TEXT NOT NULL , `status` VARCHAR(10) NOT NULL DEFAULT 'active' , PRIMARY KEY (`id`)) ENGINE = InnoDB;\rVerify that the table is created with the DESCRIBE command\nDESCRIBE user;\rInsert information into the data table with the INSERT INTO command\nINSERT INTO `user` (`id`, `first_name`, `last_name`, `email`, `phone`, `comments`, `status`) VALUES\r(NULL, 'Amanda', 'Nunes', 'anunes@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Alexander', 'Volkanovski', 'avolkanovski@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Khabib', 'Nurmagomedov', 'knurmagomedov@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Kamaru', 'Usman', 'kusman@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Israel', 'Adesanya', 'iadesanya@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Henry', 'Cejudo', 'hcejudo@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Valentina', 'Shevchenko', 'vshevchenko@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Tyron', 'Woodley', 'twoodley@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Rose', 'Namajunas ', 'rnamajunas@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Tony', 'Ferguson ', 'tferguson@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Jorge', 'Masvidal ', 'jmasvidal@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Nate', 'Diaz ', 'ndiaz@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Conor', 'McGregor ', 'cmcGregor@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Cris', 'Cyborg ', 'ccyborg@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Tecia', 'Torres ', 'ttorres@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Ronda', 'Rousey ', 'rrousey@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Holly', 'Holm ', 'hholm@ufc.com', '012345 678910', '', 'active'),\r(NULL, 'Joanna', 'Jedrzejczyk ', 'jjedrzejczyk@ufc.com', '012345 678910', '', 'active');\rUse the SELECT command to display the table:\nSELECT * FROM user;\rUse exit to leave. Add If cannot disconnect from DB instance, use Ctrl+C "
+},
+{
+	"uri": "/2-preparation/2.9-depfcjmanaapp/",
+	"title": "Deploying FCJ Management Application",
+	"tags": [],
+	"description": "",
+	"content": "Deploy FCJ Management application We use git to clone the source code. First of all, install git with the following command:\nsudo yum install git\rUse the git init command used to create and initialize a new Git repository (Git Repo) locally. git init Make a clone of the application code repository\ngit clone https://github.com/First-Cloud-Journey/000004-EC2.git\rGo to the directory of the lab 000004-EC2\ncd 000004-EC2\rNPM stands for Node package manager is a tool to create and manage Javascript programming libraries for Node.js. Using npm init to initialize the project will generate a sample package.json file.\nnpm init\rIf you do not have Nodejs installed, you can refer to Install Nodejs on Amazon Linux Next we do the dependencies installation\nexpress\nDotenv\nexpress-handlebars\nbody-parser\nmysql\nnpm install express dotenv express-handlebars body-parser mysql\rDo the test and create a .env file that uses vi to configure the database. Create .env file using touch .env command Use vi to open configuration. Perform database configuration\nDB_HOST = 'db-instance.crmmitoajvxx.us-east-1.rds.amazonaws.com'\rDB_NAME = 'awsuser'\rDB_USER = 'admin'\rDB_PASS = 'phuc2002'\rIn which, DB_HOST is the Endpoint of the DB instance DB_NAME is the name of the database created in the DB instance DB_USER is the database username that was created in the DB instance DB_PASS is the database password created in the DB instance Restart the Express server. Use Nodemon to save time\nnpm install --save-dev nodemon\rStart the local server\nnpm start\rAccess to EC2\nSelect Instances Select FCJ-Management instance Copy Public IPv4 address Use the browser and paste the Public IPv4 address and port to test the application. Syntax:\n\u0026lt;Public IPv4 address\u0026gt;:5000\rExample: 3.91.32.39:5000 "
+},
+{
+	"uri": "/2-preparation/2.10-launchami/",
+	"title": "Launch AMI from Virtual Machine",
+	"tags": [],
+	"description": "",
+	"content": "Launch AMI from Virtual Machine In this step, you will initialize an Amazon Machine Image (AMI) for the Amazon Linux Instance that was set up in the previous step. An AMI is a configuration snapshot of an EC2 Instance that allows you to deploy multiple EC2 Instances with the same configuration as the original EC2 Instance. AMI is commonly used inside Launch Template to template EC2 Instances.\nAccess to EC2\nSelect Instances Select FCJ-Management instance Select Actions Select Image and templates Select Create image Configure Template\nImage name, enter FCJ-Management-AMI Image description, enter AMI for FCJ-Management Select Create image AMI initialization takes about 5 minutes. After 5 minutes we see Status switch to Available We have completed the preparation steps for deploying FCJ Management with Auto Scaling Group.\nIn the next section, we will begin to initialize and deploy the main content of this exercise.\n"
+},
+{
+	"uri": "/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

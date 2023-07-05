@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Connecting DB Instance on AWS System Manager</title>
+    <link>/2-preparation/2.8-connectdb/</link>
+    <description>Recent content in Connecting DB Instance on AWS System Manager</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="/2-preparation/2.8-connectdb/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
